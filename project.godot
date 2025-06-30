@@ -11,7 +11,8 @@ config_version=5
 [application]
 
 config/name="Medieval Game"
-config/features=PackedStringArray("4.4", "Mobile")
+run/main_scene="uid://dkwiknj8ddhvr"
+config/features=PackedStringArray("4.4", "C#", "Mobile")
 config/icon="res://icon.svg"
 
 [dotnet]
