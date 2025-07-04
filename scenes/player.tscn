@@ -392,11 +392,16 @@ animations = [{
 script = ExtResource("1_8f1cb")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(0.92, 1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-2, -3)
-scale = Vector2(0.0638889, 0.0511112)
+scale = Vector2(0.0346959, 0.027521)
 sprite_frames = SubResource("SpriteFrames_smehm")
-animation = &"run_up"
-frame = 6
-frame_progress = 0.819251
+animation = &"run"
+frame = 5
+frame_progress = 0.777131
+
+[node name="Camera2D" type="Camera2D" parent="."]
+scale = Vector2(1, 1.04)
+zoom = Vector2(2.5, 2.5)
