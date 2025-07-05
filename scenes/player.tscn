@@ -404,4 +404,4 @@ frame_progress = 0.777131
 
 [node name="Camera2D" type="Camera2D" parent="."]
 scale = Vector2(1, 1.04)
-zoom = Vector2(2.5, 2.5)
+zoom = Vector2(2, 2)
