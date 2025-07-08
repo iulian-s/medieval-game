@@ -71,10 +71,6 @@
 [ext_resource type="Texture2D" uid="uid://dmhn234fq3pju" path="res://art/characters/Player/Throwing/0_Dark_Oracle_Throwing_010.png" id="69_oxcmq"]
 [ext_resource type="Texture2D" uid="uid://ceor0bt47t8dk" path="res://art/characters/Player/Throwing/0_Dark_Oracle_Throwing_011.png" id="70_wylla"]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8f1cb"]
-radius = 4.0
-height = 8.0
-
 [sub_resource type="SpriteFrames" id="SpriteFrames_smehm"]
 animations = [{
 "frames": [{
@@ -392,18 +388,24 @@ animations = [{
 "speed": 15.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_8f1cb"]
+radius = 2.17391
+height = 8.0
+
 [node name="player" type="CharacterBody2D"]
 script = ExtResource("1_8f1cb")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-scale = Vector2(0.92, 1)
-shape = SubResource("CapsuleShape2D_8f1cb")
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(0, -3)
+position = Vector2(0, -6)
 scale = Vector2(0.0346959, 0.027521)
 sprite_frames = SubResource("SpriteFrames_smehm")
 animation = &"run"
+offset = Vector2(0, -15)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+scale = Vector2(0.92, 1)
+shape = SubResource("CapsuleShape2D_8f1cb")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 scale = Vector2(1, 1.04)
