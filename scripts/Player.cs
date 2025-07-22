@@ -4,20 +4,35 @@ using System.Numerics;
 
 public partial class Player : CharacterBody2D
 {
-    int speed = 300;
+    bool enemy_in_area = false;
+    bool enemy_attack_cooldown = true;
+    bool player_alive = true;
+    int speed = 200;
     string current_direction;
     private AnimatedSprite2D animatedSprite;
     private bool facingLeft = false;
-
+    Undead enemy;
+    [Export] private Timer attackCooldown;
     public override void _Ready()
     {
         animatedSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        attackCooldown.Timeout += _on_attack_cooldown_timeout;
         animatedSprite.Play("idle");
     }
     public override void _PhysicsProcess(double delta)
     {
+        if (!player_alive)
+            return;
         UpdateAnimationRotation((float)delta);
         player_movement();
+        enemy_attack();
+        if (Global.playerHP <= 0)
+        {
+            player_alive = false;
+            animatedSprite.Play("death");
+            GD.Print("Player is dead");
+            
+        }
         MoveAndSlide();
     }
     public void player_movement()
@@ -25,26 +40,26 @@ public partial class Player : CharacterBody2D
         Godot.Vector2 direction = Godot.Vector2.Zero;
 
         if (Input.IsActionPressed("ui_right"))
-        direction.X += 1;
-    if (Input.IsActionPressed("ui_left"))
-        direction.X -= 1;
-    if (Input.IsActionPressed("ui_down"))
-        direction.Y += 1;
-    if (Input.IsActionPressed("ui_up"))
-        direction.Y -= 1;
+            direction.X += 1;
+        if (Input.IsActionPressed("ui_left"))
+            direction.X -= 1;
+        if (Input.IsActionPressed("ui_down"))
+            direction.Y += 1;
+        if (Input.IsActionPressed("ui_up"))
+            direction.Y -= 1;
 
-    if (direction != Godot.Vector2.Zero)
-    {
-        direction = direction.Normalized();
-        current_direction = GetDirectionFromVector(direction);
-        play_anim(1);
-    }
-    else
-    {
-        play_anim(0);
-    }
+        if (direction != Godot.Vector2.Zero)
+        {
+            direction = direction.Normalized();
+            current_direction = GetDirectionFromVector(direction);
+            play_anim(1);
+        }
+        else
+        {
+            play_anim(0);
+        }
 
-    Velocity = direction * speed;
+        Velocity = direction * speed;
     }
 
     public void play_anim(sbyte movement)
@@ -125,19 +140,51 @@ public partial class Player : CharacterBody2D
         else targetRotation = 0;
         animatedSprite.RotationDegrees = Mathf.Lerp(animatedSprite.RotationDegrees, targetRotation, delta * 10);
     }
-    
+
     private string GetDirectionFromVector(Godot.Vector2 dir)
-{
-    if (dir.X > 0 && dir.Y < 0) return "up_right";
-    if (dir.X < 0 && dir.Y < 0) return "up_left";
-    if (dir.X > 0 && dir.Y > 0) return "down_right";
-    if (dir.X < 0 && dir.Y > 0) return "down_left";
-    if (dir.X > 0) return "right";
-    if (dir.X < 0) return "left";
-    if (dir.Y < 0) return "up";
-    if (dir.Y > 0) return "down";
-    return "idle";
-}
+    {
+        if (dir.X > 0 && dir.Y < 0) return "up_right";
+        if (dir.X < 0 && dir.Y < 0) return "up_left";
+        if (dir.X > 0 && dir.Y > 0) return "down_right";
+        if (dir.X < 0 && dir.Y > 0) return "down_left";
+        if (dir.X > 0) return "right";
+        if (dir.X < 0) return "left";
+        if (dir.Y < 0) return "up";
+        if (dir.Y > 0) return "down";
+        return "idle";
+    }
 
+    public void player() { }
 
+    public void _on_player_hitbox_body_entered(Node body)
+    {
+        if (body.HasMethod("enemy"))
+        {
+            enemy_in_area = true;
+
+        }
+    }
+    public void _on_player_hitbox_body_exited(Node body)
+    {
+        if (body.HasMethod("enemy"))
+        {
+            enemy_in_area = false;
+        }
+    }
+
+    public void enemy_attack()
+    {
+        if (enemy_in_area && enemy_attack_cooldown)
+        {
+            Global.playerHP -= 10;
+            enemy_attack_cooldown = false;
+            attackCooldown.Start();
+            GD.Print("Player HP: " + Global.playerHP);
+        }
+    }
+
+    public void _on_attack_cooldown_timeout()
+    {
+        enemy_attack_cooldown = true;
+    }
 }

@@ -1,4 +1,4 @@
-[gd_scene load_steps=73 format=3 uid="uid://cwyykgmn80fx"]
+[gd_scene load_steps=74 format=3 uid="uid://cwyykgmn80fx"]
 
 [ext_resource type="Script" uid="uid://cufc4kdhqcd2p" path="res://scripts/Player.cs" id="1_8f1cb"]
 [ext_resource type="Texture2D" uid="uid://d24xx3nn52axt" path="res://art/characters/Player/Idle/0_Dark_Oracle_Idle_000.png" id="1_fulsm"]
@@ -160,7 +160,7 @@ animations = [{
 "duration": 1.0,
 "texture": ExtResource("28_5vs2b")
 }],
-"loop": true,
+"loop": false,
 "name": &"death",
 "speed": 20.0
 }, {
@@ -392,14 +392,20 @@ animations = [{
 radius = 2.17391
 height = 8.0
 
-[node name="player" type="CharacterBody2D"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_8f1cb"]
+radius = 15.0
+
+[node name="player" type="CharacterBody2D" node_paths=PackedStringArray("attackCooldown")]
 script = ExtResource("1_8f1cb")
+attackCooldown = NodePath("attack_cooldown")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(0, -6)
 scale = Vector2(0.0346959, 0.027521)
 sprite_frames = SubResource("SpriteFrames_smehm")
-animation = &"run"
+animation = &"attack"
+frame = 6
+frame_progress = 0.777864
 offset = Vector2(0, -15)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -410,3 +416,16 @@ shape = SubResource("CapsuleShape2D_8f1cb")
 [node name="Camera2D" type="Camera2D" parent="."]
 scale = Vector2(1, 1.04)
 zoom = Vector2(2, 2)
+
+[node name="player_hitbox" type="Area2D" parent="."]
+visible = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player_hitbox"]
+position = Vector2(0, -5)
+shape = SubResource("CircleShape2D_8f1cb")
+
+[node name="attack_cooldown" type="Timer" parent="."]
+
+[connection signal="body_entered" from="player_hitbox" to="." method="_on_player_hitbox_body_entered"]
+[connection signal="body_exited" from="player_hitbox" to="." method="_on_player_hitbox_body_exited"]
+[connection signal="timeout" from="attack_cooldown" to="." method="_on_attack_cooldown_timeout"]

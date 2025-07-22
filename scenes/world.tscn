@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://dkwiknj8ddhvr"]
+[gd_scene load_steps=36 format=3 uid="uid://dkwiknj8ddhvr"]
 
 [ext_resource type="PackedScene" uid="uid://cwyykgmn80fx" path="res://scenes/player.tscn" id="1_nnsk1"]
 [ext_resource type="Texture2D" uid="uid://6qqwhohwhhji" path="res://art/environment/Map/Texture/TX Tileset Grass.png" id="2_i7141"]
@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://2l1smhycoq76" path="res://art/environment/Map/Texture/buildings/buildng2.png" id="8_pm21f"]
 [ext_resource type="Texture2D" uid="uid://bqqf7eab5ijy5" path="res://art/environment/Map/Texture/buildings/turn.png" id="9_2lf6f"]
 [ext_resource type="Texture2D" uid="uid://dc5xlhfhlf5ex" path="res://art/environment/Map/Texture/Objects.png" id="14_7t5mc"]
+[ext_resource type="PackedScene" uid="uid://e6ywbhh7l5ir" path="res://scenes/undead.tscn" id="18_lakw3"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_jhx03"]
 texture = ExtResource("2_i7141")
@@ -6126,3 +6127,6 @@ layer_3/tile_data = PackedInt32Array(720902, 1114116, 11, 786442, 393220, 12, 52
 [node name="player" parent="." instance=ExtResource("1_nnsk1")]
 position = Vector2(62, 134)
 scale = Vector2(1.5, 1.5)
+
+[node name="Undead" parent="." instance=ExtResource("18_lakw3")]
+position = Vector2(-130, 274)
